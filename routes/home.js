@@ -22,6 +22,7 @@ router.get('/', async (req, res, next) => {
             next();
         } catch (error) {
             console.log(`Authentication error: ${error.message}`);
+            res.status(500).send(error.message);
         }
 })
 
