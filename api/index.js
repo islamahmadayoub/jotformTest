@@ -8,7 +8,7 @@ const homepage = require('../routes/home.js');
 index.use(express.json());
 index.use(express.urlencoded({ extended: true }));
 
-index.use(homepage);
+index.use('/', homepage);
 
 
 
