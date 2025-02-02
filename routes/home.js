@@ -15,6 +15,8 @@ const authParams = {
 
 router.get('/', (req, res) => {
     console.log('hello from home');
+    console.log("Inside home router:", req.method, req.url);
+
     res.send('hello from home');
 })
 
