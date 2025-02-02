@@ -3,13 +3,13 @@ const axios = require('axios');
 
 const router = express.Router();
 
-const authURL = `https://${process.env.DOMAIN_URL}/services/oauth2/token`;
+const authURL = `https://${process.env.SALESFORCE_DOMAIN}/services/oauth2/token`;
 
 const authParams = {
     params: {
         grant_type: 'client_credentials',
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
+        client_id: process.env.SALESFORCE_CLIENT_ID,
+        client_secret: process.env.SALESFORCE_CLIENT_SECRET,
     }
 }
 
