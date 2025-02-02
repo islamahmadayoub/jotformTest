@@ -13,17 +13,21 @@ const authParams = {
     }
 }
 
-router.get('/', async (req, res, next) => {
-        try {
-            const response = await axios.post(authURL, null, authParams);
-            req.access_token = response.data.access_token;
-            console.log('Hello from Homepage')
-            console.log(`Authenticated with token ${response.data.access_token}`);
-            next();
-        } catch (error) {
-            console.log(`Authentication error: ${error.message}`);
-            res.status(500).send(error.message);
-        }
+router.get('/', (req, res) => {
+    res.send('hello from home');
 })
+
+// router.get('/', async (req, res, next) => {
+//         try {
+//             const response = await axios.post(authURL, null, authParams);
+//             req.access_token = response.data.access_token;
+//             console.log('Hello from Homepage')
+//             console.log(`Authenticated with token ${response.data.access_token}`);
+//             next();
+//         } catch (error) {
+//             console.log(`Authentication error: ${error.message}`);
+//             res.status(500).send(error.message);
+//         }
+// })
 
 module.exports = router;
