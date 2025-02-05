@@ -1,5 +1,5 @@
 const express = require('express');
-const homepage = require('../routes/home.js');
+const homepage = require('./routes/home.js');
 console.log("Home router loaded:", homepage);
 
 
