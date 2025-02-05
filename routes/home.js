@@ -26,7 +26,7 @@ router.get('/', async (req, res, next) => {
             req.access_token    = response.data.access_token;
             console.log('Hello from Homepage')
             console.log(`Authenticated with token ${response.data.access_token}`);
-            next();
+            res.send('Authenticated');
         } catch (error) {
             console.log(`Authentication error: ${error.message}`);
             res.status(500).send(error.message);
