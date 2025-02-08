@@ -13,19 +13,13 @@ const authParams = {
     }
 }
 
-// router.get('/', (req, res) => {
-//     console.log('hello from home');
-//     console.log("Inside home router:", req.method, req.url);
-//
-//     res.send('hello from home');
-// })
-
 router.get('/', async (req, res, next) => {
         try {
             const response      = await axios.post(authURL, null, authParams);
-            req.access_token    = response.data.access_token;
+            req.session.access_token = response.data.access_token;
+            // req.access_token    = response.data.access_token;
             console.log('Hello from Homepage')
-            console.log(`Authenticated with token ${response.data.access_token}`);
+            console.log(`Authenticated with token ${req.access_token}`);
             res.send('Authenticated');
         } catch (error) {
             console.log(`Authentication error: ${error.message}`);

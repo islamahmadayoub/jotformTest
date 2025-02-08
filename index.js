@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const homepage = require('./routes/home.js');
 console.log("Home router loaded:", homepage);
 
@@ -6,6 +7,15 @@ console.log("Home router loaded:", homepage);
 
 const index = express();
 const port = process.env.PORT || 3000;
+const secret = process.env.SECRET;
+
+
+index.use(session({
+    secret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+}));
 
 
 // Expect JSON or Form Data
