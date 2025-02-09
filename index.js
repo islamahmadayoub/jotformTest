@@ -31,14 +31,14 @@ index.use(express.urlencoded({ extended: true }));
 // Handle Routes
 
 // Confirm received request
-index.get('/', (req, res, next) => {
+index.get('/', (req, res) => {
     console.log(`Request Received. Method is ::: ${req.method} and URL used is ::: ${req.url}`);
     console.log(`Access Token is ::: ${accessToken}`);
-    next();
+    res.redirect('/create-record')
 });
 
 // Send request to Salesforce
-index.get('/create-record', async (req, res, next) => {
+index.use('/create-record', async (req, res) => {
     try {
         console.log('reached create record middleware')
         const sampleAccount = {
@@ -54,7 +54,7 @@ index.get('/create-record', async (req, res, next) => {
         console.log('CUSTOM MESSAGE ::: Error Creating Account')
         console.log('Error code is ::: ' + error.response.data[0].errorCode);
         if (error.response.data[0].errorCode === "INVALID_SESSION_ID") {
-            next();
+            res.redirect('/authenticate');
         } else {
             res.status(500).json(error.response.data);
         }
@@ -62,7 +62,7 @@ index.get('/create-record', async (req, res, next) => {
 });
 
 
-index.get('/authenticate', async (req, res) => {
+index.use('/authenticate', async (req, res) => {
     try {
         console.log('CUSTOM MESSAGE ::: Moved to Next Middleware Successfully')
         const response = await axios.post(authEndpoint, null, authRequestConfigObject);
