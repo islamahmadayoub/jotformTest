@@ -31,54 +31,58 @@ index.use(express.json());
 index.use(express.urlencoded({ extended: true }));
 
 /* --------------------------------------- */
-// Handle Routes
+// Setup Variables and Constants
+const sampleAccount = {
+    Name: "Test Account From Middleware"
+};
 
-// Confirm received request
-index.post('/', (req, res, next) => {
-    console.log(`Request Received. Method is ::: ${req.method} and URL used is ::: ${req.url}`);
-    console.log(`Access Token is ::: ${accessToken}`);
-    console.log('Received request body is ::: ', req.body);
-    console.log('Headers:', req.headers);
+// Helper Functions
 
-    next();
-});
-
-// Send request to Salesforce
-index.post('/create-record', async (req, res, next) => {
+async function createAccount() {
     try {
-        console.log('reached create record middleware')
-        const sampleAccount = {
-            Name: "Test Account From Middleware"
-        };
-        const response = await axios.post(accountUrl, sampleAccount, postConfig);
-
-        res.status(201).json({
-            message: "Account created successfully",
-            salesforceId: response.data.id
-        });
-    } catch (error){
-        console.log('CUSTOM MESSAGE ::: Error Creating Account')
-        console.log('Error code is ::: ' + error.response.data[0].errorCode);
+        return await axios.post(accountUrl, sampleAccount, postConfig);
+    } catch (error) {
         if (error.response.data[0].errorCode === "INVALID_SESSION_ID") {
-            next();
-        } else {
-            res.status(500).json(error.response.data);
+            return "INVALID_SESSION_ID";
         }
+        throw error;
     }
-});
+}
 
-
-index.post('/authenticate', async (req, res, next) => {
+async function authenticate() {
     try {
         console.log('CUSTOM MESSAGE ::: Moved to Next Middleware Successfully')
         const response = await axios.post(authEndpoint, null, authRequestConfigObject);
         accessToken = response.data.access_token;
         postConfig.headers.Authorization = `Bearer ${accessToken}`;
         console.log(`Access Token is ::: ${accessToken}`);
-        next();
+        return true;
     } catch (error) {
         console.error("Error fetching token:", error.response?.data || error.message);
-        res.status(500).json({ error: "Failed to retrieve access token" });
+        return false;
+    }
+}
+
+// Handle Routes
+index.post("/", async (req, res) => {
+    try {
+        let result = await createAccount();
+
+        if (result === "INVALID_SESSION_ID") {
+            const authSuccess = await authenticate();
+            if (!authSuccess) {
+                return res.status(500).json({ error: "Failed to retrieve access token" });
+            }
+            result = await createAccount();
+        }
+
+        return res.status(201).json({
+            message: "Account created successfully",
+            salesforceId: result.data.id
+        });
+    } catch (error) {
+        console.error("Error creating account:", error.response?.data || error.message);
+        res.status(500).json(error.response?.data || { error: "Failed to create account" });
     }
 });
 
