@@ -1,5 +1,5 @@
 /* --------------------------------------- */
-// Setup
+// Setup and config
 const express       = require('express');
 const axios         = require('axios');
 const multer        = require('multer');
