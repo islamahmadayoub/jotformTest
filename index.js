@@ -49,15 +49,20 @@ index.use( async (req, res, next) => {
             salesforceId: response.data.id
         });
     } catch (error){
-        res.status(500).send(error.message);
-    }
+        console.log('CUSTOM MESSAGE ::: Error Creating Account')
+        if (error.response.data.details[0].errorCode === "INVALID_SESSION_ID") {
+            console.log('CUSTOM MESSAGE ::: INVALID_SESSION_ID')
+            next(); // Move to the next middleware
+        }
 
+    }
 
 });
 
 
 index.use( async (req, res) => {
     try {
+        console.log('CUSTOM MESSAGE ::: Moved to Next Middleware Successfully')
         const response = await axios.post(authEndpoint, null, authRequestConfigObject);
         accessToken = response.data.access_token;
         res.json(response.data);
