@@ -33,6 +33,7 @@ index.use(express.urlencoded({ extended: true }));
 // Confirm received request
 index.get('/', (req, res, next) => {
     console.log(`Request Received. Method is ::: ${req.method} and URL used is ::: ${req.url}`);
+    console.log(`Access Token is ::: ${accessToken}`);
     next();
 });
 
@@ -65,6 +66,7 @@ index.use( async (req, res) => {
         console.log('CUSTOM MESSAGE ::: Moved to Next Middleware Successfully')
         const response = await axios.post(authEndpoint, null, authRequestConfigObject);
         accessToken = response.data.access_token;
+        console.log(`Access Token is ::: ${accessToken}`);
         res.json(response.data);
     } catch (error) {
         console.error("Error fetching token:", error.response?.data || error.message);
