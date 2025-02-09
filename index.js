@@ -31,7 +31,7 @@ index.use(express.urlencoded({ extended: true }));
 // Handle Routes
 
 // Confirm received request
-index.get('/', (req, res) => {
+index.use('/', (req, res) => {
     console.log(`Request Received. Method is ::: ${req.method} and URL used is ::: ${req.url}`);
     console.log(`Access Token is ::: ${accessToken}`);
     console.log('Received request body is ::: ', JSON.stringify(req.body));
