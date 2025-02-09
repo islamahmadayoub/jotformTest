@@ -2,7 +2,6 @@
 // Setup
 const express = require('express');
 const jsforce = require('jsforce');
-const {Connection} = require("jsforce");
 
 
 const index = express();
@@ -22,7 +21,7 @@ index.use(express.urlencoded({ extended: true }));
 
 index.get('/oauth2/callback', async (req, res) => {
     console.log('Callback is initiated successfully.');
-    const conn = new Connection({oauth2: oauth})
+    const conn = new jsforce.Connection({oauth2: oauth})
     const code = req.query.code;
     const userInfo = await conn.authorize(code);
     console.log(`Access Token is ::: ${conn.accessToken}`);
