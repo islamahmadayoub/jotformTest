@@ -66,6 +66,7 @@ index.use( async (req, res) => {
         console.log('CUSTOM MESSAGE ::: Moved to Next Middleware Successfully')
         const response = await axios.post(authEndpoint, null, authRequestConfigObject);
         accessToken = response.data.access_token;
+        postConfig.headers.Authorization = `Bearer ${accessToken}`;
         console.log(`Access Token is ::: ${accessToken}`);
         res.json(response.data);
     } catch (error) {
