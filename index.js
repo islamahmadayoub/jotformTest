@@ -50,7 +50,7 @@ index.use( async (req, res, next) => {
         });
     } catch (error){
         console.log('CUSTOM MESSAGE ::: Error Creating Account')
-        console.dir(error.response);
+        console.log('Error code is ::: ' + error.response.data[0].errorCode);
         res.status(500).json(error.response.data[0].errorCode);
     }
 
