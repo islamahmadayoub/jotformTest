@@ -34,17 +34,17 @@ index.use(express.urlencoded({ extended: true }));
 // Handle Routes
 
 // Confirm received request
-index.use('/', (req, res) => {
+index.post('/', (req, res, next) => {
     console.log(`Request Received. Method is ::: ${req.method} and URL used is ::: ${req.url}`);
     console.log(`Access Token is ::: ${accessToken}`);
     console.log('Received request body is ::: ', req.body);
     console.log('Headers:', req.headers);
 
-    res.redirect('/create-record')
+    next();
 });
 
 // Send request to Salesforce
-index.use('/create-record', async (req, res) => {
+index.post('/create-record', async (req, res, next) => {
     try {
         console.log('reached create record middleware')
         const sampleAccount = {
@@ -60,7 +60,7 @@ index.use('/create-record', async (req, res) => {
         console.log('CUSTOM MESSAGE ::: Error Creating Account')
         console.log('Error code is ::: ' + error.response.data[0].errorCode);
         if (error.response.data[0].errorCode === "INVALID_SESSION_ID") {
-            res.redirect('/authenticate');
+            next();
         } else {
             res.status(500).json(error.response.data);
         }
@@ -68,15 +68,14 @@ index.use('/create-record', async (req, res) => {
 });
 
 
-index.use('/authenticate', async (req, res) => {
+index.post('/authenticate', async (req, res, next) => {
     try {
         console.log('CUSTOM MESSAGE ::: Moved to Next Middleware Successfully')
         const response = await axios.post(authEndpoint, null, authRequestConfigObject);
         accessToken = response.data.access_token;
         postConfig.headers.Authorization = `Bearer ${accessToken}`;
         console.log(`Access Token is ::: ${accessToken}`);
-
-        res.redirect('/create-record');
+        next();
     } catch (error) {
         console.error("Error fetching token:", error.response?.data || error.message);
         res.status(500).json({ error: "Failed to retrieve access token" });
