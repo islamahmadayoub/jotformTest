@@ -26,7 +26,7 @@ let postConfig = {
     }
 }
 
-index.use(upload.none);
+index.use(upload.none());
 index.use(express.json());
 index.use(express.urlencoded({ extended: true }));
 
