@@ -38,7 +38,7 @@ index.get('/', (req, res, next) => {
 });
 
 // Send request to Salesforce
-index.use('/create-record', async (req, res, next) => {
+index.get('/create-record', async (req, res, next) => {
     try {
         console.log('reached create record middleware')
         const sampleAccount = {
@@ -62,7 +62,7 @@ index.use('/create-record', async (req, res, next) => {
 });
 
 
-index.use('/authenticate', async (req, res) => {
+index.get('/authenticate', async (req, res) => {
     try {
         console.log('CUSTOM MESSAGE ::: Moved to Next Middleware Successfully')
         const response = await axios.post(authEndpoint, null, authRequestConfigObject);
