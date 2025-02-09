@@ -32,8 +32,8 @@ index.get('/oauth2/callback', async (req, res) => {
     res.send('Hello World!!! Authenticated');
 });
 
-index.use('/', (req, res, next) => {
-    console.log("Request received:", req.method, req.url);
+index.get('/', (req, res, next) => {
+    console.log(`Request Received. Method is ::: ${req.method} and URL used is ::: ${req.url}`);
     next();
 });
 
