@@ -2,6 +2,8 @@
 // Setup
 const express   = require('express');
 const axios     = require('axios');
+const multer    = require('multer');
+const upload = multer();
 const index     = express();
 const port      = process.env.PORT || 3000;
 const authEndpoint = `${process.env.SALESFORCE_URL}/services/oauth2/token`;
@@ -35,6 +37,7 @@ index.use('/', (req, res) => {
     console.log(`Request Received. Method is ::: ${req.method} and URL used is ::: ${req.url}`);
     console.log(`Access Token is ::: ${accessToken}`);
     console.log('Received request body is ::: ', JSON.stringify(req.body));
+    console.log(JSON.parse(req.body))
     res.redirect('/create-record')
 });
 
