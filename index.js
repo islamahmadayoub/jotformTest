@@ -1,36 +1,49 @@
+/* --------------------------------------- */
+// Setup
 const express = require('express');
-const session = require('express-session');
-const homepage = require('./routes/home.js');
-console.log("Home router loaded:", homepage);
-
+const jsforce = require('jsforce');
+const {Connection} = require("jsforce");
 
 
 const index = express();
 const port = process.env.PORT || 3000;
-const secret = process.env.SECRET;
 
+const oauth = new jsforce.OAuth2({
+    clientId    : process.env.SALESFORCE_CLIENT_ID,
+    clientSecret: process.env.SALESFORCE_CLIENT_SECRET,
+    redirectUri : process.env.REDIRECT_URI,
+});
 
-index.use(session({
-    secret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true },
-}));
-
-
-// Expect JSON or Form Data
 index.use(express.json());
 index.use(express.urlencoded({ extended: true }));
 
-index.use((req, res, next) => {
+/* --------------------------------------- */
+// Handle Routes
+
+index.get('/oauth2/callback', async (req, res) => {
+    console.log('Callback is initiated successfully.');
+    const conn = new Connection({oauth2: oauth})
+    const code = req.query.code;
+    const userInfo = await conn.authorize(code);
+    console.log(`Access Token is ::: ${conn.accessToken}`);
+    console.log(`instance URL is ::: ${conn.instanceUrl}`);
+    console.log(`User ID is      ::: ${userInfo.id}`);
+    console.log(`Org ID is       ::: ${userInfo.organizationId}`);
+    res.send('Hello World!!! Authenticated');
+});
+
+index.use('/', (req, res, next) => {
     console.log("Request received:", req.method, req.url);
     next();
 });
 
-
-index.use(homepage);
+index.get('/oauth2/auth', (req, res) => {
+    res.redirect(oauth.getAuthorizationUrl({
+        scope: 'api id web'
+    }));
+});
 
 
 index.listen(port, () => {
     console.log(`App listening on port ${port}`);
-})
+});
