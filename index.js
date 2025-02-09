@@ -37,7 +37,7 @@ index.get('/', (req, res, next) => {
     next();
 });
 
-// Send a request to Salesforce
+// Send request to Salesforce
 index.use('/create-record', async (req, res, next) => {
     try {
         console.log('reached create record middleware')
