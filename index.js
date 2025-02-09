@@ -49,11 +49,7 @@ index.use( async (req, res, next) => {
             salesforceId: response.data.id
         });
     } catch (error){
-        console.error("Error creating account:", error.response?.data || error.message);
-        res.status(error.response?.status || 500).json({
-            error: "Failed to create account",
-            details: error.response?.data || error.message
-        });
+        res.status(500).send(error.message);
     }
 
 
