@@ -34,6 +34,7 @@ index.use(express.urlencoded({ extended: true }));
 index.get('/', (req, res) => {
     console.log(`Request Received. Method is ::: ${req.method} and URL used is ::: ${req.url}`);
     console.log(`Access Token is ::: ${accessToken}`);
+    console.log('Received request body is ::: ', JSON.stringify(req.body));
     res.redirect('/create-record')
 });
 
