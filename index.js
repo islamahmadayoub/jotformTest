@@ -50,6 +50,8 @@ index.use( async (req, res, next) => {
         });
     } catch (error){
         console.log('CUSTOM MESSAGE ::: Error Creating Account')
+        console.log('Error is :::' + error);
+        console.log('error response is ::: ' + error.response);
         if (error.response.data.details[0].errorCode === "INVALID_SESSION_ID") {
             console.log('CUSTOM MESSAGE ::: INVALID_SESSION_ID')
             next(); // Move to the next middleware
