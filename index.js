@@ -1,8 +1,8 @@
 /* --------------------------------------- */
 // Setup
-const express   = require('express');
-const axios     = require('axios');
-const multer    = require('multer');
+const express       = require('express');
+const axios         = require('axios');
+const multer        = require('multer');
 const upload = multer();
 const index     = express();
 const port      = process.env.PORT || 3000;
@@ -28,6 +28,7 @@ let postConfig = {
 
 index.use(express.json());
 index.use(express.urlencoded({ extended: true }));
+index.use(upload.none);
 
 /* --------------------------------------- */
 // Handle Routes
@@ -36,8 +37,9 @@ index.use(express.urlencoded({ extended: true }));
 index.use('/', (req, res) => {
     console.log(`Request Received. Method is ::: ${req.method} and URL used is ::: ${req.url}`);
     console.log(`Access Token is ::: ${accessToken}`);
-    console.log('Received request body is ::: ', JSON.stringify(req.body));
-    console.log(JSON.parse(req.body))
+    console.log('Received request body is ::: ', req.body);
+    console.log('Headers:', req.headers);
+
     res.redirect('/create-record')
 });
 
