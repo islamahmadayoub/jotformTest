@@ -40,6 +40,7 @@ index.get('/', (req, res, next) => {
 // Send a request to Salesforce
 index.use('/create-record', async (req, res, next) => {
     try {
+        console.log('reached create record middleware')
         const sampleAccount = {
             Name: "Test Account From Middleware"
         };
